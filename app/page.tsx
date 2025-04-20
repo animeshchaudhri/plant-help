@@ -340,10 +340,9 @@ export default function Home() {
     <div className="app">
       <header className="header">
         <div className="container">
-          <div className="header-content">
+          <div className="header-content flex flex-col gap-2">
             <div>
               <h1>GSSS Ladhowal Plant Database</h1>
-              <p>Explore and manage the botanical diversity on our campus</p>
             </div>
             <div className="auth-section">
               {isAuth ? (
@@ -361,12 +360,12 @@ export default function Home() {
       </header>
 
       <main className="container">
-        <div className="tabs">
-          <div 
+        <div >
+          {/* <div 
             className={`tab ${activeTab === 'view' ? 'active' : ''}`}
             onClick={() => setActiveTab('view')}>
             View Plants
-          </div>
+          </div> */}
           {isAuth && (
             <div 
               className={`tab ${activeTab === 'add' ? 'active' : ''}`}
@@ -396,7 +395,10 @@ export default function Home() {
         {/* View Plants Tab */}
         <div className={`content ${activeTab === 'view' ? 'active' : ''}`}>
           {loading ? (
-            <div className="loading-spinner">Loading plants...</div>
+            <div className="loading-spinner">
+              <div className="spinner"></div>
+              <p>Loading your botanical collection...</p>
+            </div>
           ) : plants.length === 0 ? (
             <div className="no-plants">
               <p>No plants found. Add your first plant to get started!</p>
@@ -639,23 +641,32 @@ export default function Home() {
 
       <style jsx global>{`
         :root {
-          --primary: #4CAF50;
-          --primary-light: #81C784;
-          --accent: #FF5722;
+          --primary: #2ECC71;
+          --primary-dark: #27AE60;
+          --primary-light: #A8E6CF;
+          --accent: #FF6B6B;
+          --accent-dark: #ee5253;
+          --background: #F7F9FC;
           --white: #FFFFFF;
-          --black: #000000;
+          --black: #2D3436;
+          --gray: #636E72;
+          --gray-light: #B2BEC3;
+          --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          --shadow-hover: 0 8px 12px rgba(0, 0, 0, 0.15);
+          --border-radius: 12px;
         }
 
         * {
           box-sizing: border-box;
+          margin: 0;
+          padding: 0;
         }
 
         body {
-          font-family: Arial, sans-serif;
-          margin: 0;
-          padding: 0;
-          background-color: var(--white);
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+          background-color: var(--background);
           color: var(--black);
+          line-height: 1.6;
         }
 
         .app {
@@ -665,16 +676,20 @@ export default function Home() {
         }
 
         .container {
-          width: 90%;
-          max-width: 1200px;
+          width: 92%;
+          max-width: 1400px;
           margin: 0 auto;
-          flex: 1;
+          padding: 0 1rem;
         }
 
         .header {
-          background-color: var(--primary);
-          color: var(--white);
-          padding: 1rem 0;
+          background-color: var(--white);
+          color: var(--black);
+          padding: 1.5rem 0;
+          box-shadow: var(--shadow);
+          position: sticky;
+          top: 0;
+          z-index: 100;
         }
 
         .header-content {
@@ -683,39 +698,67 @@ export default function Home() {
           align-items: center;
         }
 
+        .header h1 {
+          font-size: 1.8rem;
+          font-weight: 700;
+          background: linear-gradient(120deg, var(--primary), var(--primary-dark));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          margin: 0;
+        }
+
+        .header-subtitle {
+          color: var(--gray);
+          font-size: 1rem;
+          margin-top: 0.5rem;
+        }
+
         .auth-section {
-          margin-left: 1rem;
+          margin-left: 2rem;
         }
 
         .auth-btn {
-          background-color: var(--white);
-          color: var(--primary);
-          padding: 0.5rem 1rem;
+          background-color: var(--primary);
+          color: var(--white);
+          padding: 0.75rem 1.5rem;
           border: none;
-          border-radius: 4px;
+          border-radius: var(--border-radius);
           cursor: pointer;
-          font-weight: 500;
+          font-weight: 600;
+          font-size: 0.95rem;
+          transition: all 0.3s ease;
         }
 
         .auth-btn:hover {
-          background-color: var(--accent);
+          background-color: var(--primary-dark);
+          transform: translateY(-2px);
         }
 
         .tabs {
           display: flex;
-          margin: 1rem 0;
+          gap: 1rem;
+          margin: 2rem 0;
+          padding: 0.5rem;
+          background-color: var(--white);
+          border-radius: var(--border-radius);
+          box-shadow: var(--shadow);
         }
 
         .tab {
           flex: 1;
           padding: 1rem;
           text-align: center;
-          background-color: var(--primary-light);
-          color: var(--black);
+          background-color: transparent;
+          color: var(--gray);
           cursor: pointer;
-          margin-right: 0.5rem;
-          border-radius: 4px;
-          transition: background-color 0.3s;
+          border-radius: var(--border-radius);
+          font-weight: 600;
+          transition: all 0.3s ease;
+        }
+
+        .tab:hover {
+          color: var(--primary);
+          background-color: var(--primary-light);
         }
 
         .tab.active {
@@ -723,155 +766,263 @@ export default function Home() {
           color: var(--white);
         }
 
-        .content {
-          display: none;
-        }
-
         .content.active {
           display: block;
+          animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
         }
 
         .loading-spinner {
-          text-align: center;
-          margin: 2rem 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          min-height: 200px;
+        }
+
+        .loading-spinner::after {
+          content: "";
+          width: 40px;
+          height: 40px;
+          border: 4px solid var(--primary-light);
+          border-top: 4px solid var(--primary);
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+          margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
         }
 
         .no-plants {
           text-align: center;
-          margin: 2rem 0;
+          margin: 4rem 0;
+          padding: 2rem;
+          background-color: var(--white);
+          border-radius: var(--border-radius);
+          box-shadow: var(--shadow);
         }
 
         .plant-list {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-          gap: 1rem;
+          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+          gap: 2rem;
+          padding: 1rem 0;
         }
 
         .plant-card {
           background-color: var(--white);
-          border: 1px solid var(--primary-light);
-          border-radius: 4px;
+          border-radius: var(--border-radius);
           overflow: hidden;
-          display: flex;
-          flex-direction: column;
-          transition: transform 0.2s;
+          box-shadow: var(--shadow);
+          transition: all 0.3s ease;
         }
 
         .plant-card:hover {
-          transform: scale(1.02);
+          transform: translateY(-5px);
+          box-shadow: var(--shadow-hover);
         }
 
         .plant-img {
-          flex: 1;
           position: relative;
+          height: 220px;
+          overflow: hidden;
+        }
+
+        .plant-img img {
+          transition: transform 0.5s ease;
+        }
+
+        .plant-card:hover .plant-img img {
+          transform: scale(1.05);
         }
 
         .plant-info {
-          padding: 1rem;
+          padding: 1.5rem;
         }
 
         .plant-name {
-          margin: 0;
-          font-size: 1.2rem;
+          font-size: 1.4rem;
+          font-weight: 700;
+          color: var(--black);
+          margin-bottom: 0.5rem;
         }
 
         .plant-scientific {
-          margin: 0.5rem 0;
+          font-size: 1rem;
           font-style: italic;
           color: var(--primary);
+          margin-bottom: 1rem;
         }
 
         .plant-actions {
           display: flex;
-          justify-content: space-between;
-          margin-top: 1rem;
+          gap: 0.75rem;
+          flex-wrap: wrap;
+          margin-top: 1.5rem;
+        }
+
+        .plant-btn {
+          padding: 0.75rem 1.25rem;
+          border: none;
+          border-radius: var(--border-radius);
+          cursor: pointer;
+          font-weight: 600;
+          font-size: 0.9rem;
+          transition: all 0.3s ease;
+          flex: 1;
+          min-width: fit-content;
+          text-align: center;
+          text-decoration: none;
         }
 
         .plant-btn {
           background-color: var(--primary);
           color: var(--white);
-          border: none;
-          border-radius: 4px;
-          padding: 0.5rem 1rem;
-          cursor: pointer;
-          font-weight: 500;
-          transition: background-color 0.3s;
+        }
+
+        .plant-btn.edit {
+          background-color: var(--primary-light);
+          color: var(--primary-dark);
+        }
+
+        .plant-btn.delete {
+          background-color: var(--accent);
+          color: var(--white);
+        }
+
+        .plant-btn.qr {
+          background-color: var(--gray-light);
+          color: var(--black);
         }
 
         .plant-btn:hover {
-          background-color: var(--accent);
+          transform: translateY(-2px);
+          filter: brightness(1.1);
         }
 
-        .qr-container {
-          text-align: center;
-          margin-top: 1rem;
+        .plant-btn.delete:hover {
+          background-color: var(--accent-dark);
         }
 
         .form-group {
-          margin-bottom: 1rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+          display: block;
+          margin-bottom: 0.5rem;
+          font-weight: 600;
+          color: var(--black);
+        }
+
+        .form-group input,
+        .form-group textarea {
+          width: 100%;
+          padding: 0.75rem;
+          border: 2px solid var(--gray-light);
+          border-radius: var(--border-radius);
+          font-size: 1rem;
+          transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+          outline: none;
+          border-color: var(--primary);
+          box-shadow: 0 0 0 3px var(--primary-light);
         }
 
         .form-row {
-          display: flex;
-          justify-content: space-between;
-          margin-bottom: 1rem;
-        }
-
-        .form-row .form-group {
-          flex: 1;
-          margin-right: 1rem;
-        }
-
-        .form-row .form-group:last-child {
-          margin-right: 0;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1.5rem;
+          margin-bottom: 1.5rem;
         }
 
         .upload-container {
           border: 2px dashed var(--primary-light);
-          padding: 2rem;
-          border-radius: 4px;
+          padding: 2.5rem;
+          border-radius: var(--border-radius);
           text-align: center;
-          cursor: pointer;
-          transition: border-color 0.3s;
+          transition: all 0.3s ease;
         }
 
         .upload-container:hover {
           border-color: var(--primary);
+          background-color: var(--background);
         }
 
         .upload-button {
           background-color: var(--primary);
           color: var(--white);
-          padding: 0.8rem 1.5rem;
+          padding: 1rem 2rem;
           border: none;
-          border-radius: 4px;
+          border-radius: var(--border-radius);
           cursor: pointer;
-          font-weight: 500;
-          transition: background-color 0.3s;
+          font-weight: 600;
+          transition: all 0.3s ease;
         }
 
         .upload-button:hover {
-          background-color: var(--accent);
+          background-color: var(--primary-dark);
+          transform: translateY(-2px);
         }
 
         .image-preview {
-          margin-top: 1rem;
-          border-radius: 4px;
+          margin-top: 1.5rem;
+          border-radius: var(--border-radius);
           overflow: hidden;
-          max-width: 200px;
+          box-shadow: var(--shadow);
         }
 
         .footer {
-          background-color: var(--primary);
-          color: var(--white);
+          background-color: var(--white);
+          color: var(--gray);
           text-align: center;
-          padding: 1rem 0;
+          padding: 2rem 0;
+          margin-top: 4rem;
+          box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.05);
         }
 
         .qr-hidden {
           position: absolute;
           left: -9999px;
           visibility: hidden;
+        }
+
+        @media (max-width: 768px) {
+          .plant-list {
+            grid-template-columns: 1fr;
+          }
+
+          .form-row {
+            grid-template-columns: 1fr;
+          }
+
+          .header h1 {
+            font-size: 1.4rem;
+          }
+
+          .plant-actions {
+            flex-direction: column;
+          }
+
+          .plant-btn {
+            width: 100%;
+          }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+          .plant-list {
+            grid-template-columns: repeat(2, 1fr);
+          }
         }
       `}</style>
     </div>

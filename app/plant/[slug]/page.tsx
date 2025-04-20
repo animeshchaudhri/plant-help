@@ -113,7 +113,9 @@ export default function PlantDetail() {
         </header>
 
         <main className="container">
-          
+            <Link href="/" className="back-btn">
+                ← Back to Plants
+            </Link>
 
             <div className="detail-layout">          
                 <div className="plant-image-container">
@@ -190,200 +192,256 @@ export default function PlantDetail() {
             </div>
         </footer>      <style jsx global>{`
         :root {
-          --primary: #2e7d32;
-          --primary-light: #4caf50;
-          --primary-dark: #1b5e20;
-          --accent: #f1f8e9;
-          --text: #333;
-          --text-light: #666;
-          --white: #fff;
-          --shadow: 0 4px 8px rgba(0,0,0,0.1);
+          --primary: #2ECC71;
+          --primary-dark: #27AE60;
+          --primary-light: #A8E6CF;
+          --accent: #FF6B6B;
+          --accent-dark: #ee5253;
+          --background: #F7F9FC;
+          --white: #FFFFFF;
+          --black: #2D3436;
+          --gray: #636E72;
+          --gray-light: #B2BEC3;
+          --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          --shadow-hover: 0 8px 12px rgba(0, 0, 0, 0.15);
+          --border-radius: 12px;
         }
-        
+
         * {
           box-sizing: border-box;
           margin: 0;
           padding: 0;
         }
-        
+
         body {
-          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+          background-color: var(--background);
+          color: var(--black);
           line-height: 1.6;
-          color: var(--text);
-          background-color: #f5f8f5;
         }
-        
+
+        .plant-detail-page {
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .container {
+          width: 92%;
+          max-width: 1400px;
+          margin: 0 auto;
+          padding: 2rem;
+        }
+
+        .header {
+          background-color: var(--white);
+          color: var(--black);
+          padding: 2rem 0;
+          box-shadow: var(--shadow);
+          text-align: center;
+        }
+
+        .header h1 {
+          font-size: 2.5rem;
+          font-weight: 700;
+          margin: 0;
+          background: linear-gradient(120deg, var(--primary), var(--primary-dark));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        .scientific-name {
+          font-style: italic;
+          font-size: 1.2rem;
+          color: var(--primary);
+          margin-top: 0.5rem;
+        }
+
+        .detail-layout {
+          display: grid;
+          grid-template-columns: minmax(300px, 1fr) 2fr;
+          gap: 2rem;
+          margin: 2rem 0;
+        }
+
+        .plant-image-container {
+          position: sticky;
+          top: 2rem;
+        }
+
         .image-wrapper {
           position: relative;
           width: 100%;
           height: 400px;
-          border-radius: 8px;
+          border-radius: var(--border-radius);
           overflow: hidden;
+          box-shadow: var(--shadow);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .image-wrapper:hover {
+          transform: scale(1.02);
+          box-shadow: var(--shadow-hover);
         }
 
         .plant-detail-img {
           width: 100%;
           height: 100%;
-          border-radius: 8px;
-          box-shadow: var(--shadow);
           object-fit: cover;
         }
-        
-        .header {
-          background-color: var(--primary);
-          color: var(--white);
-          text-align: center;
-          padding: 2rem 1rem;
-        }
-        
-        .scientific-name {
-          font-style: italic;
-          font-size: 1.2rem;
-          opacity: 0.9;
-        }
-        
-        .container {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 2rem;
-        }
-        
-        .back-link {
-          margin-bottom: 2rem;
-        }
-        
-        .detail-layout {
-          display: grid;
-          grid-template-columns: 1fr 2fr;
-          gap: 2rem;
-        }
-        
-        @media (max-width: 768px) {
-          .detail-layout {
-            grid-template-columns: 1fr;
-          }
-        }
-        
-        .plant-image-container {
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
-        
-        .plant-detail-img {
-          width: 100%;
-          border-radius: 8px;
-          box-shadow: var(--shadow);
-        }
-        
-        .qr-section {
-          background-color: var(--white);
-          padding: 1.5rem;
-          border-radius: 8px;
-          box-shadow: var(--shadow);
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          text-align: center;
-        }
-        
-        .qr-section h3 {
-          margin-bottom: 1rem;
-          color: var(--primary);
-        }
-        
-        .qr-section p {
-          margin-top: 0.75rem;
-          font-size: 0.9rem;
-          color: var(--text-light);
-        }
-        
+
         .plant-info-container {
           display: flex;
           flex-direction: column;
           gap: 2rem;
         }
-        
-        .plant-description, .plant-taxonomy {
+
+        .plant-description, 
+        .plant-taxonomy {
           background-color: var(--white);
-          padding: 1.5rem;
-          border-radius: 8px;
+          padding: 2rem;
+          border-radius: var(--border-radius);
           box-shadow: var(--shadow);
         }
-        
+
         h2 {
           color: var(--primary);
-          margin-bottom: 1rem;
-          padding-bottom: 0.5rem;
-          border-bottom: 2px solid var(--accent);
+          font-size: 1.5rem;
+          font-weight: 600;
+          margin-bottom: 1.5rem;
+          padding-bottom: 0.75rem;
+          border-bottom: 2px solid var(--primary-light);
         }
-        
+
+        .plant-description p {
+          color: var(--gray);
+          font-size: 1.1rem;
+          line-height: 1.8;
+        }
+
         .taxonomy-table {
           display: flex;
           flex-direction: column;
+          gap: 0.5rem;
         }
-        
- .taxonomy-row {
+
+        .taxonomy-row {
           display: flex;
-          padding: 0.75rem 0;
-          border-bottom: 1px solid #eee;
+          padding: 1rem;
+          border-radius: var(--border-radius);
+          background-color: var(--background);
+          transition: transform 0.2s ease;
         }
-        
-        .taxonomy-row:last-child {
-          border-bottom: none;
+
+        .taxonomy-row:hover {
+          transform: translateX(5px);
+          background-color: var(--primary-light);
         }
-        
+
         .taxonomy-label {
           flex: 1;
-          font-weight: bold;
-          color: var(--text-light);
+          font-weight: 600;
+          color: var(--primary-dark);
         }
-        
+
         .taxonomy-value {
           flex: 2;
+          color: var(--gray);
         }
-        
+
+        .loading {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          min-height: 60vh;
+          gap: 1rem;
+        }
+
+        .loading::after {
+          content: "";
+          width: 40px;
+          height: 40px;
+          border: 4px solid var(--primary-light);
+          border-top: 4px solid var(--primary);
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        .error-container {
+          text-align: center;
+          padding: 4rem 1rem;
+          background-color: var(--white);
+          border-radius: var(--border-radius);
+          box-shadow: var(--shadow);
+          margin: 2rem auto;
+          max-width: 600px;
+        }
+
+        .error-container h1 {
+          color: var(--accent);
+          margin-bottom: 1rem;
+        }
+
+        .error-container p {
+          color: var(--gray);
+          margin-bottom: 2rem;
+        }
+
         .plant-btn {
           display: inline-block;
-          padding: 0.5rem 1rem;
+          padding: 0.75rem 1.5rem;
           background-color: var(--primary);
           color: var(--white);
-          border-radius: 4px;
+          border-radius: var(--border-radius);
           text-decoration: none;
           cursor: pointer;
           border: none;
-          font-size: 1rem;
+          font-weight: 600;
+          transition: all 0.3s ease;
         }
-        
-        .loading {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 60vh;
-          font-size: 1.2rem;
-          color: var(--text-light);
+
+        .plant-btn:hover {
+          background-color: var(--primary-dark);
+          transform: translateY(-2px);
         }
-        
-        .error-container {
-          text-align: center;
-          padding: 3rem 1rem;
-        }
-        
-        .error-container h1 {
-          color: #e53935;
-          margin-bottom: 1rem;
-        }
-        
-        .error-container p {
-          margin-bottom: 2rem;
-        }
-        
+
         .footer {
-          background-color: var(--primary);
-          color: var(--white);
+          background-color: var(--white);
+          color: var(--gray);
           text-align: center;
-          padding: 1rem;
-          margin-top: 2rem;
+          padding: 2rem 0;
+          margin-top: auto;
+          box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        @media (max-width: 768px) {
+          .detail-layout {
+            grid-template-columns: 1fr;
+          }
+
+          .plant-image-container {
+            position: relative;
+            top: 0;
+          }
+
+          .header h1 {
+            font-size: 2rem;
+          }
+
+          .container {
+            padding: 1rem;
+          }
+
+          .plant-description, 
+          .plant-taxonomy {
+            padding: 1.5rem;
+          }
         }
       `}</style>
     </div>
