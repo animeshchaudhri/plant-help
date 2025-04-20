@@ -289,36 +289,56 @@ export default function Home() {
         return;
       }
 
-      // Create a canvas element
+      // Get the QR code size
+      const size = 256; // This should match the size prop of QRCode
+      const padding = 32; // Add some padding around the QR code
+      const totalSize = size + (padding * 2);
+
+      // Create a canvas element with the right size
       const canvas = document.createElement('canvas');
+      canvas.width = totalSize;
+      canvas.height = totalSize;
+      
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      // Draw white background
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, totalSize, totalSize);
+
+      // Convert SVG to data URL
       const serializer = new XMLSerializer();
       const svgStr = serializer.serializeToString(qrElement);
-
-      // Create an image to draw on canvas
       const img = document.createElement('img');
-      img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgStr)));
+      
+      // Create a blob URL for better handling of special characters
+      const svgBlob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
+      const svgUrl = URL.createObjectURL(svgBlob);
 
       img.onload = () => {
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
-        
-        // Draw white background
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        // Draw the image
-        ctx.drawImage(img, 0, 0);
+        // Draw the QR code centered with padding
+        ctx.drawImage(img, padding, padding, size, size);
+
+        // Add a label below the QR code
+        ctx.font = '14px Arial';
+        ctx.fillStyle = '#000';
+        ctx.textAlign = 'center';
+        ctx.fillText(plantName, totalSize / 2, totalSize - 10);
 
         // Create download link
         const link = document.createElement('a');
         link.download = `${getSlug(plantName)}-qr.png`;
-        link.href = canvas.toDataURL('image/png');
+        link.href = canvas.toDataURL('image/png', 1.0);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+
+        // Clean up
+        URL.revokeObjectURL(svgUrl);
       };
+
+      img.src = svgUrl;
+
     } catch (error) {
       console.error('Error downloading QR code:', error);
       alert('Failed to download QR code. Please try again.');
@@ -360,12 +380,12 @@ export default function Home() {
       </header>
 
       <main className="container">
-        <div >
-          {/* <div 
+       <div className="tabs">
+          <div 
             className={`tab ${activeTab === 'view' ? 'active' : ''}`}
             onClick={() => setActiveTab('view')}>
             View Plants
-          </div> */}
+          </div>
           {isAuth && (
             <div 
               className={`tab ${activeTab === 'add' ? 'active' : ''}`}
@@ -449,8 +469,9 @@ export default function Home() {
                     <div className="qr-hidden" data-plant={getSlug(plant.name)}>
                       <QRCode 
                         value={`${baseUrl}/plant/${getSlug(plant.name)}`} 
-                        size={128} 
+                        size={256}
                         level="H"
+                        style={{ padding: '1rem', backgroundColor: 'white' }}
                       />
                     </div>
                   </div>
